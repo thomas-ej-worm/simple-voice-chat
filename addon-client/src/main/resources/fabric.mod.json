@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "voicechat_standalone_addon",
+  "version": "${mod_version}",
+  "name": "Simple Voice Chat Standalone Addon",
+  "description": "Client addon for connecting to standalone voice servers",
+  "authors": [
+    "henkelmax",
+    "Claude AI"
+  ],
+  "contact": {
+    "homepage": "https://github.com/henkelmax/simple-voice-chat",
+    "issues": "https://github.com/henkelmax/simple-voice-chat/issues"
+  },
+  "license": "GPL-3.0",
+  "icon": "assets/voicechat/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "voicechat": [
+      "de.maxhenkel.voicechat.addon.StandaloneAddonPlugin"
+    ]
+  },
+  "depends": {
+    "fabricloader": "${fabric_loader_dependency}",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}",
+    "voicechat": "${voicechat_version}"
+  }
+}

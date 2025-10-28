@@ -1,0 +1,52 @@
+apply plugin: 'fabric-loom'
+apply plugin: 'com.gradleup.shadow'
+
+apply from: "https://raw.githubusercontent.com/henkelmax/mod-gradle-scripts/${mod_gradle_script_version}/mod.gradle"
+
+version = "${mod_version}-addon"
+
+processResources {
+    filesMatching('fabric.mod.json') {
+        expand 'java_version': java_version,
+                'mod_version': mod_version,
+                'minecraft_version': minecraft_version,
+                'fabric_loader_dependency': fabric_loader_dependency,
+                'voicechat_version': mod_version
+    }
+}
+
+repositories {
+    maven { url = 'https://maven.shedaniel.me/' }
+}
+
+dependencies {
+    implementation project(':api')
+    implementation project(':common')
+    implementation project(':common-client')
+
+    // This addon depends on the main voicechat mod
+    modCompileOnly project(':fabric')
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    archiveClassifier.set('fabric')
+
+    relocate 'com.google.gson', 'de.maxhenkel.voicechat.libraries.gson'
+}
+
+remapJar {
+    dependsOn shadowJar
+    inputFile.set shadowJar.archiveFile.get()
+}
+
+jar {
+    classifier 'dev'
+}
+
+task buildAll(type: Copy) {
+    dependsOn build
+    from remapJar
+    rename '(.+)-addon(.+)', '\$1-standalone-addon\$2'
+    into file("$projectDir/build/libs/")
+}
